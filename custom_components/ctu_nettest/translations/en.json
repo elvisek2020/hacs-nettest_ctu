@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ČTÚ NetTest",
+        "description": "{disclaimer}",
+        "data": {
+          "control_server_url": "Control server URL",
+          "update_interval_hours": "Measurement interval",
+          "auto_update_enabled": "Measure automatically"
+        },
+        "data_description": {
+          "control_server_url": "RMBT control server of the Czech Telecommunication Office. Change it only if you run your own RMBT infrastructure.",
+          "update_interval_hours": "A measurement fully saturates the connection, so keep the interval high.",
+          "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "The control server could not be reached or did not return a valid response.",
+      "invalid_url": "Enter a full URL including http:// or https://."
+    },
+    "abort": {
+      "single_instance_allowed": "ČTÚ NetTest is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "ČTÚ NetTest",
+        "description": "{disclaimer}",
+        "data": {
+          "control_server_url": "Control server URL",
+          "update_interval_hours": "Measurement interval",
+          "auto_update_enabled": "Measure automatically"
+        },
+        "data_description": {
+          "control_server_url": "RMBT control server of the Czech Telecommunication Office. Change it only if you run your own RMBT infrastructure.",
+          "update_interval_hours": "A measurement fully saturates the connection, so keep the interval high.",
+          "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "The control server could not be reached or did not return a valid response.",
+      "invalid_url": "Enter a full URL including http:// or https://."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "download": { "name": "Download" },
+      "upload": { "name": "Upload" },
+      "ping": { "name": "Ping" },
+      "jitter": { "name": "Jitter" },
+      "last_test": { "name": "Last test" }
+    },
+    "binary_sensor": {
+      "test_running": { "name": "Test running" }
+    }
+  },
+  "services": {
+    "run_test": {
+      "name": "Run measurement",
+      "description": "Runs a ČTÚ NetTest measurement outside of the configured schedule. The measurement takes roughly half a minute and fully saturates the connection."
+    }
+  }
+}

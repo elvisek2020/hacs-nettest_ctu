@@ -1,0 +1,14 @@
+{
+  "domain": "ctu_nettest",
+  "name": "ČTÚ NetTest",
+  "codeowners": ["@elvisek2020"],
+  "config_flow": true,
+  "documentation": "https://github.com/elvisek2020/hacs-nettest_ctu",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/elvisek2020/hacs-nettest_ctu/issues",
+  "loggers": ["rmbt_client"],
+  "requirements": ["rmbt-client==1.1.1"],
+  "single_config_entry": true,
+  "version": "0.1.0"
+}

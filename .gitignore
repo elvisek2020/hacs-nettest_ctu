@@ -1,0 +1,14 @@
+# Lokální pomocné adresáře – nikdy necommitovat
+_backup/
+_docs/
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.DS_Store

@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ČTÚ NetTest",
+        "description": "{disclaimer}",
+        "data": {
+          "control_server_url": "URL control serveru",
+          "update_interval_hours": "Interval měření",
+          "auto_update_enabled": "Měřit automaticky"
+        },
+        "data_description": {
+          "control_server_url": "RMBT control server Českého telekomunikačního úřadu. Měň jen pokud provozuješ vlastní RMBT infrastrukturu.",
+          "update_interval_hours": "Měření plně vytíží linku, drž proto interval vysoko.",
+          "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Control server není dostupný nebo nevrátil platnou odpověď.",
+      "invalid_url": "Zadej celou URL včetně http:// nebo https://."
+    },
+    "abort": {
+      "single_instance_allowed": "ČTÚ NetTest je už nastavený."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "ČTÚ NetTest",
+        "description": "{disclaimer}",
+        "data": {
+          "control_server_url": "URL control serveru",
+          "update_interval_hours": "Interval měření",
+          "auto_update_enabled": "Měřit automaticky"
+        },
+        "data_description": {
+          "control_server_url": "RMBT control server Českého telekomunikačního úřadu. Měň jen pokud provozuješ vlastní RMBT infrastrukturu.",
+          "update_interval_hours": "Měření plně vytíží linku, drž proto interval vysoko.",
+          "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Control server není dostupný nebo nevrátil platnou odpověď.",
+      "invalid_url": "Zadej celou URL včetně http:// nebo https://."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "download": { "name": "Download" },
+      "upload": { "name": "Upload" },
+      "ping": { "name": "Ping" },
+      "jitter": { "name": "Jitter" },
+      "last_test": { "name": "Poslední měření" }
+    },
+    "binary_sensor": {
+      "test_running": { "name": "Probíhá měření" }
+    }
+  },
+  "services": {
+    "run_test": {
+      "name": "Spustit měření",
+      "description": "Spustí měření ČTÚ NetTest mimo nastavený interval. Měření trvá přibližně půl minuty a plně vytíží linku."
+    }
+  }
+}

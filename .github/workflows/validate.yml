@@ -24,6 +24,3 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # Brand assets live in home-assistant/brands, which only accepts
-          # integrations shipped with Home Assistant itself.
-          ignore: brands

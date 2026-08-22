@@ -1,4 +1,4 @@
-"""ČTÚ NetTest — orientační měření rychlosti internetu proti RMBT serverům ČTÚ."""
+"""NetTest ČTÚ — orientační měření rychlosti internetu proti RMBT serverům ČTÚ."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             DOMAIN
         )
         if not entries:
-            raise HomeAssistantError("Integrace ČTÚ NetTest není nastavená")
+            raise HomeAssistantError("Integrace NetTest ČTÚ není nastavená")
         for entry in entries:
             await entry.runtime_data.async_run_test()
 
@@ -42,7 +42,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 async def async_setup_entry(
     hass: HomeAssistant, config_entry: CtuNetTestConfigEntry
 ) -> bool:
-    """Set up ČTÚ NetTest from a config entry."""
+    """Set up NetTest ČTÚ from a config entry."""
     coordinator = CtuNetTestCoordinator(hass, config_entry)
     config_entry.runtime_data = coordinator
 

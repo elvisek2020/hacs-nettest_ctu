@@ -1,4 +1,4 @@
-"""Config flow for the ČTÚ NetTest integration."""
+"""Config flow for the NetTest ČTÚ integration."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ from .rmbt_runner import RmbtError, register_client
 
 _LOGGER = logging.getLogger(__name__)
 
-TITLE = "ČTÚ NetTest"
+TITLE = "NetTest ČTÚ"
 
 
 def _schema(defaults: dict[str, Any], *, with_url: bool) -> vol.Schema:

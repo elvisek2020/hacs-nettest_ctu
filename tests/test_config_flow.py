@@ -1,4 +1,4 @@
-"""Tests for the ČTÚ NetTest config flow."""
+"""Tests for the NetTest ČTÚ config flow."""
 
 from unittest.mock import patch
 
@@ -41,7 +41,7 @@ async def test_user_flow_creates_entry(
         )
 
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert result["title"] == "ČTÚ NetTest"
+    assert result["title"] == "NetTest ČTÚ"
     assert result["data"] == {
         CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
         CONF_UPDATE_INTERVAL_HOURS: 12,

@@ -1,7 +1,7 @@
-# ČTÚ NetTest pro Home Assistant
+# NetTest ČTÚ pro Home Assistant
 
 Custom integrace pro Home Assistant, která měří rychlost internetového připojení
-proti měřicí infrastruktuře **ČTÚ NetTest** ([nettest.ctu.gov.cz](https://nettest.ctu.gov.cz))
+proti měřicí infrastruktuře **NetTest ČTÚ** ([nettest.ctu.gov.cz](https://nettest.ctu.gov.cz))
 pomocí protokolu **RMBT**. Výsledky vystaví jako senzory a jde je spustit ručně
 i na interval.
 
@@ -47,9 +47,9 @@ pingu, počet vzorků, adresa měřicího serveru a délka testu. Veřejná IP a
 
 1. HACS → tři tečky vpravo nahoře → **Custom repositories**
 2. Repository: `https://github.com/elvisek2020/hacs-nettest_ctu`, kategorie **Integration**
-3. Najdi **ČTÚ NetTest**, dej **Download**
+3. Najdi **NetTest ČTÚ**, dej **Download**
 4. Restartuj Home Assistant
-5. **Nastavení → Zařízení a služby → Přidat integraci → ČTÚ NetTest**
+5. **Nastavení → Zařízení a služby → Přidat integraci → NetTest ČTÚ**
 
 ### Manuálně
 
@@ -103,7 +103,7 @@ automation:
 type: vertical-stack
 cards:
   - type: entities
-    title: ČTÚ NetTest
+    title: NetTest ČTÚ
     entities:
       - entity: sensor.ctu_nettest_download
       - entity: sensor.ctu_nettest_upload

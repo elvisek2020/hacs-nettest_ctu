@@ -1,4 +1,4 @@
-"""Sensors exposing the ČTÚ NetTest measurement results."""
+"""Sensors exposing the NetTest ČTÚ measurement results."""
 
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ from .rmbt_runner import RmbtResult
 
 @dataclass(frozen=True, kw_only=True)
 class CtuNetTestSensorDescription(SensorEntityDescription):
-    """Describes a ČTÚ NetTest sensor."""
+    """Describes a NetTest ČTÚ sensor."""
 
     value: Callable[[RmbtResult], StateType | datetime]
     attributes: Callable[[RmbtResult], dict[str, Any]] | None = None
@@ -100,7 +100,7 @@ async def async_setup_entry(
     config_entry: CtuNetTestConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up the ČTÚ NetTest sensors."""
+    """Set up the NetTest ČTÚ sensors."""
     coordinator = config_entry.runtime_data
     async_add_entities(
         CtuNetTestSensor(coordinator, description) for description in SENSORS

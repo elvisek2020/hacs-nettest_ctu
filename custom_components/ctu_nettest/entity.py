@@ -1,4 +1,4 @@
-"""Shared entity base for the ČTÚ NetTest integration."""
+"""Shared entity base for the NetTest ČTÚ integration."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import ATTRIBUTION, DOMAIN
 from .coordinator import CtuNetTestCoordinator
 
-DEVICE_NAME = "ČTÚ NetTest"
+DEVICE_NAME = "NetTest ČTÚ"
 
 
 class CtuNetTestEntity(CoordinatorEntity[CtuNetTestCoordinator]):

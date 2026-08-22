@@ -1,1 +1,1 @@
-"""Tests for the ČTÚ NetTest integration."""
+"""Tests for the NetTest ČTÚ integration."""

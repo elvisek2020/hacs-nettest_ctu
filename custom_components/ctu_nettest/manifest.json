@@ -1,6 +1,6 @@
 {
   "domain": "ctu_nettest",
-  "name": "ČTÚ NetTest",
+  "name": "NetTest ČTÚ",
   "codeowners": ["@elvisek2020"],
   "config_flow": true,
   "documentation": "https://github.com/elvisek2020/hacs-nettest_ctu",
@@ -10,5 +10,5 @@
   "loggers": ["rmbt_client"],
   "requirements": ["rmbt-client==1.1.1"],
   "single_config_entry": true,
-  "version": "0.2.0"
+  "version": "0.2.1"
 }

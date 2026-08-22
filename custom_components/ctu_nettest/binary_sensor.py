@@ -1,4 +1,4 @@
-"""Binary sensor reporting whether a ČTÚ NetTest measurement is in progress."""
+"""Binary sensor reporting whether a NetTest ČTÚ measurement is in progress."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ async def async_setup_entry(
     config_entry: CtuNetTestConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up the ČTÚ NetTest binary sensor."""
+    """Set up the NetTest ČTÚ binary sensor."""
     async_add_entities(
         [CtuNetTestRunningSensor(config_entry.runtime_data, TEST_RUNNING)]
     )

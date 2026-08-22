@@ -1,4 +1,4 @@
-"""Tests for the ČTÚ NetTest coordinator, entities and service."""
+"""Tests for the NetTest ČTÚ coordinator, entities and service."""
 
 import asyncio
 from datetime import timedelta
@@ -34,8 +34,8 @@ async def test_no_measurement_when_automatic_runs_are_disabled(
     await _setup(hass, config_entry)
 
     mock_run_test.assert_not_called()
-    assert hass.states.get("sensor.ctu_nettest_download").state == "unknown"
-    assert hass.states.get("binary_sensor.ctu_nettest_test_running").state == "off"
+    assert hass.states.get("sensor.nettest_ctu_download").state == "unknown"
+    assert hass.states.get("binary_sensor.nettest_ctu_test_running").state == "off"
 
 
 async def test_scheduled_measurement_runs_after_startup(
@@ -62,12 +62,12 @@ async def test_service_populates_all_sensors(
     await hass.services.async_call(DOMAIN, SERVICE_RUN_TEST, blocking=True)
     await hass.async_block_till_done()
 
-    assert hass.states.get("sensor.ctu_nettest_download").state == "194.56"
-    assert hass.states.get("sensor.ctu_nettest_upload").state == "208.05"
-    assert hass.states.get("sensor.ctu_nettest_ping").state == "9.65"
-    assert hass.states.get("sensor.ctu_nettest_jitter").state == "1.97"
+    assert hass.states.get("sensor.nettest_ctu_download").state == "194.56"
+    assert hass.states.get("sensor.nettest_ctu_upload").state == "208.05"
+    assert hass.states.get("sensor.nettest_ctu_ping").state == "9.65"
+    assert hass.states.get("sensor.nettest_ctu_jitter").state == "1.97"
     assert (
-        hass.states.get("sensor.ctu_nettest_last_test").state
+        hass.states.get("sensor.nettest_ctu_last_test").state
         == "2026-08-18T08:22:21+00:00"
     )
 
@@ -80,12 +80,12 @@ async def test_sensor_attributes_exclude_the_public_ip(
     await hass.services.async_call(DOMAIN, SERVICE_RUN_TEST, blocking=True)
     await hass.async_block_till_done()
 
-    download = hass.states.get("sensor.ctu_nettest_download").attributes
+    download = hass.states.get("sensor.nettest_ctu_download").attributes
     assert download["bytes_transferred"] == 253939712
     assert download["threads"] == 3
     assert "certifikovaným měřením" in download["disclaimer"]
 
-    last_test = hass.states.get("sensor.ctu_nettest_last_test").attributes
+    last_test = hass.states.get("sensor.nettest_ctu_last_test").attributes
     assert last_test["test_server"] == "m01v4-nettest.ctu.gov.cz"
 
     for state in hass.states.async_all():
@@ -106,8 +106,8 @@ async def test_failed_measurement_keeps_the_integration_alive(
         await coordinator.async_refresh()
 
     assert coordinator.last_update_success is False
-    assert hass.states.get("sensor.ctu_nettest_download").state == "unavailable"
-    assert hass.states.get("binary_sensor.ctu_nettest_test_running").state == "off"
+    assert hass.states.get("sensor.nettest_ctu_download").state == "unavailable"
+    assert hass.states.get("binary_sensor.nettest_ctu_test_running").state == "off"
 
 
 async def test_service_reports_a_failed_measurement(
@@ -135,7 +135,7 @@ async def test_running_state_is_published_while_measuring(
     await _setup(hass, config_entry)
     coordinator = config_entry.runtime_data
     in_flight: asyncio.Future = hass.loop.create_future()
-    running = "binary_sensor.ctu_nettest_test_running"
+    running = "binary_sensor.nettest_ctu_test_running"
 
     with patch.object(hass, "async_add_executor_job", return_value=in_flight):
         first = hass.async_create_task(coordinator.async_refresh())
@@ -232,4 +232,4 @@ async def test_unload_entry(
     assert await hass.config_entries.async_unload(config_entry.entry_id)
     await hass.async_block_till_done()
 
-    assert hass.states.get("sensor.ctu_nettest_download").state == "unavailable"
+    assert hass.states.get("sensor.nettest_ctu_download").state == "unavailable"

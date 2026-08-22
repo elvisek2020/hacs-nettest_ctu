@@ -1,4 +1,4 @@
-"""Fixtures for the ČTÚ NetTest tests."""
+"""Fixtures for the NetTest ČTÚ tests."""
 
 from collections.abc import Generator
 from datetime import UTC, datetime
@@ -52,7 +52,7 @@ def config_entry() -> MockConfigEntry:
     """Return a configured entry with automatic measurement disabled."""
     return MockConfigEntry(
         domain=DOMAIN,
-        title="ČTÚ NetTest",
+        title="NetTest ČTÚ",
         data={
             CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
             CONF_CLIENT_UUID: CLIENT_UUID,

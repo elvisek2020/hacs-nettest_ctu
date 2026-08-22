@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "ČTÚ NetTest",
+        "title": "NetTest ČTÚ",
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "URL control serveru",
@@ -21,13 +21,13 @@
       "invalid_url": "Zadej celou URL včetně http:// nebo https://."
     },
     "abort": {
-      "single_instance_allowed": "ČTÚ NetTest je už nastavený."
+      "single_instance_allowed": "NetTest ČTÚ je už nastavený."
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "ČTÚ NetTest",
+        "title": "NetTest ČTÚ",
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "URL control serveru",
@@ -61,7 +61,7 @@
   "services": {
     "run_test": {
       "name": "Spustit měření",
-      "description": "Spustí měření ČTÚ NetTest mimo nastavený interval. Měření trvá přibližně půl minuty a plně vytíží linku."
+      "description": "Spustí měření NetTest ČTÚ mimo nastavený interval. Měření trvá přibližně půl minuty a plně vytíží linku."
     }
   }
 }

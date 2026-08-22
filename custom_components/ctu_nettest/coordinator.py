@@ -1,4 +1,4 @@
-"""Coordinator scheduling ČTÚ NetTest RMBT measurements."""
+"""Coordinator scheduling NetTest ČTÚ RMBT measurements."""
 
 from __future__ import annotations
 

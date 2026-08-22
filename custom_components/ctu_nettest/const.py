@@ -1,4 +1,4 @@
-"""Constants for the ČTÚ NetTest integration."""
+"""Constants for the NetTest ČTÚ integration."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ TEST_TIMEOUT_SECONDS: Final = 180
 
 SERVICE_RUN_TEST: Final = "run_test"
 
-ATTRIBUTION: Final = "Měřeno proti infrastruktuře ČTÚ NetTest (nettest.ctu.gov.cz)"
+ATTRIBUTION: Final = "Měřeno proti infrastruktuře NetTest ČTÚ (nettest.ctu.gov.cz)"
 
 DISCLAIMER: Final = (
     "Neoficiální integrace bez vazby na ČTÚ. Výsledek je orientační a není "

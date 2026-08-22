@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "ČTÚ NetTest",
+        "title": "NetTest ČTÚ",
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "Control server URL",
@@ -21,13 +21,13 @@
       "invalid_url": "Enter a full URL including http:// or https://."
     },
     "abort": {
-      "single_instance_allowed": "ČTÚ NetTest is already configured."
+      "single_instance_allowed": "NetTest ČTÚ is already configured."
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "ČTÚ NetTest",
+        "title": "NetTest ČTÚ",
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "Control server URL",
@@ -61,7 +61,7 @@
   "services": {
     "run_test": {
       "name": "Run measurement",
-      "description": "Runs a ČTÚ NetTest measurement outside of the configured schedule. The measurement takes roughly half a minute and fully saturates the connection."
+      "description": "Runs a NetTest ČTÚ measurement outside of the configured schedule. The measurement takes roughly half a minute and fully saturates the connection."
     }
   }
 }

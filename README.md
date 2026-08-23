@@ -19,18 +19,27 @@ i na interval.
 
 ## Co integrace umí
 
+![Stránka zařízení NetTest ČTÚ v Home Assistantu se senzory rychlosti, pingu a průměrů](https://raw.githubusercontent.com/elvisek2020/hacs-nettest_ctu/main/images/device-page.jpg)
+
 | Entita | Jednotka | Popis |
 |---|---|---|
-| `sensor.ctu_nettest_download` | Mbit/s | rychlost stahování |
-| `sensor.ctu_nettest_upload` | Mbit/s | rychlost odesílání |
-| `sensor.ctu_nettest_ping` | ms | nejkratší naměřený ping |
-| `sensor.ctu_nettest_jitter` | ms | rozptyl pingu (viz níže) |
-| `sensor.ctu_nettest_last_test` | timestamp | čas posledního dokončeného měření |
-| `sensor.ctu_nettest_average_download` | Mbit/s | průměrný download z posledních N měření |
-| `sensor.ctu_nettest_average_upload` | Mbit/s | průměrný upload z posledních N měření |
-| `binary_sensor.ctu_nettest_test_running` | on/off | probíhá měření |
+| `sensor.nettest_ctu_download` | Mbit/s | rychlost stahování |
+| `sensor.nettest_ctu_upload` | Mbit/s | rychlost odesílání |
+| `sensor.nettest_ctu_ping` | ms | nejkratší naměřený ping |
+| `sensor.nettest_ctu_jitter` | ms | rozptyl pingu (viz níže) |
+| `sensor.nettest_ctu_last_test` | timestamp | čas posledního dokončeného měření |
+| `sensor.nettest_ctu_average_download` | Mbit/s | průměrný download z posledních N měření |
+| `sensor.nettest_ctu_average_upload` | Mbit/s | průměrný upload z posledních N měření |
+| `binary_sensor.nettest_ctu_test_running` | on/off | probíhá měření |
+| `button.nettest_ctu_run_test` | — | spustí měření mimo nastavený interval |
 
-Akce `ctu_nettest.run_test` spustí měření mimo nastavený interval.
+Měření jde spustit i akcí `ctu_nettest.run_test`, což je to samé jako stisk
+tlačítka — hodí se v automatizacích a skriptech.
+
+> Instalace založené před verzí 0.2.1 mají senzory pojmenované ještě podle
+> původního názvu, tedy s prefixem `sensor.ctu_nettest_`. Přejmenování názvu
+> integrace už existující entity nepřejmenovalo, aby se nerozbily dashboardy
+> a automatizace. Tlačítko je nové, takže má prefix `nettest_ctu_` všude.
 
 Doplňující údaje jsou v atributech entit: počet vláken, přenesené bajty, medián
 pingu, počet vzorků, adresa měřicího serveru a délka testu. Veřejná IP adresa se
@@ -135,15 +144,15 @@ automation:
   - alias: Upozornění na pomalou linku
     triggers:
       - trigger: numeric_state
-        entity_id: sensor.ctu_nettest_download
+        entity_id: sensor.nettest_ctu_download
         below: 50
     actions:
       - action: notify.persistent_notification
         data:
           title: Pomalé připojení
           message: >-
-            Download je jen {{ states('sensor.ctu_nettest_download') }} Mbit/s
-            (ping {{ states('sensor.ctu_nettest_ping') }} ms).
+            Download je jen {{ states('sensor.nettest_ctu_download') }} Mbit/s
+            (ping {{ states('sensor.nettest_ctu_ping') }} ms).
 ```
 
 ## Příklad dashboard karty
@@ -154,23 +163,20 @@ cards:
   - type: entities
     title: NetTest ČTÚ
     entities:
-      - entity: sensor.ctu_nettest_download
-      - entity: sensor.ctu_nettest_upload
-      - entity: sensor.ctu_nettest_ping
-      - entity: sensor.ctu_nettest_jitter
-      - entity: sensor.ctu_nettest_last_test
-      - entity: binary_sensor.ctu_nettest_test_running
+      - entity: sensor.nettest_ctu_download
+      - entity: sensor.nettest_ctu_upload
+      - entity: sensor.nettest_ctu_ping
+      - entity: sensor.nettest_ctu_jitter
+      - entity: sensor.nettest_ctu_last_test
+      - entity: binary_sensor.nettest_ctu_test_running
   - type: button
+    entity: button.nettest_ctu_run_test
     name: Změřit teď
-    icon: mdi:speedometer
-    tap_action:
-      action: perform-action
-      perform_action: ctu_nettest.run_test
   - type: history-graph
     hours_to_show: 168
     entities:
-      - entity: sensor.ctu_nettest_download
-      - entity: sensor.ctu_nettest_upload
+      - entity: sensor.nettest_ctu_download
+      - entity: sensor.nettest_ctu_upload
 ```
 
 ## Jak to funguje

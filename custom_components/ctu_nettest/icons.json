@@ -1,0 +1,10 @@
+{
+  "entity": {
+    "button": {
+      "run_test": { "default": "mdi:speedometer" }
+    }
+  },
+  "services": {
+    "run_test": "mdi:speedometer"
+  }
+}

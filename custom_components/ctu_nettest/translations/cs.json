@@ -62,6 +62,9 @@
     },
     "binary_sensor": {
       "test_running": { "name": "Probíhá měření" }
+    },
+    "button": {
+      "run_test": { "name": "Spustit měření" }
     }
   },
   "services": {

@@ -62,6 +62,9 @@
     },
     "binary_sensor": {
       "test_running": { "name": "Test running" }
+    },
+    "button": {
+      "run_test": { "name": "Run test" }
     }
   },
   "services": {

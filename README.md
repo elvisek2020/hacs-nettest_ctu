@@ -68,13 +68,48 @@ nejstaršího započítaného měření).
 | Položka | Default | Popis |
 |---|---|---|
 | URL control serveru | `https://nettest.ctu.gov.cz/RMBTControlServer` | Měň jen pokud provozuješ vlastní RMBT infrastrukturu. |
-| Interval měření | 12 h | Měření plně vytíží linku, drž interval vysoko. |
+| Interval měření | 30 min | Zadává se v minutách, minimum je 10 a maximum 10080 (7 dní). Měření plně vytíží linku, drž interval co nejvyšší. |
 | Měřit automaticky | zapnuto | Když vypneš, měření se spustí jen akcí `ctu_nettest.run_test`. |
 | Počet měření pro průměry | 10 | Z kolika posledních měření se počítají průměrný download a upload. |
 
 Všechno se dá později změnit v **Konfigurovat** u integrace. Změna nastavení
 nespustí měření — nový interval i nový počet měření pro průměry se aplikují za
 běhu.
+
+Pozor na objem dat: jedno měření přenese stovky megabajtů, takže třeba interval
+30 minut znamená 48 měření denně a řádově desítky gigabajtů měsíčně. Na měřeném
+tarifu volte interval odpovídajícím způsobem.
+
+Instalace nastavené ve starší verzi, kde se interval zadával v hodinách, se
+převedou automaticky (12 h se stane 720 min), není potřeba nic přenastavovat.
+
+### Limity na straně ČTÚ
+
+ČTÚ nikde nepublikuje pravidla pro automatizované měření, ale jeho vlastní režim
+[Opakované měření](https://nettest.ctu.gov.cz/cs/Loop) si zadané hodnoty ořezává.
+Podle zdrojového kódu webu
+([`src/js/Loop.js`](https://github.com/CTUCZ/nettest-rmbt-website/blob/main/src/js/Loop.js)):
+
+| Parametr | Mez v oficiálním klientovi ČTÚ |
+|---|---|
+| nejkratší interval mezi testy | 10 minut |
+| nejdelší interval mezi testy | 48 hodin |
+| počet testů ve smyčce | 1 až 500 |
+
+Minimální interval této integrace je proto také 10 minut, aby nešel pod hranici,
+kterou ČTÚ dává vlastním uživatelům. Rozdíl zůstává v tom, že oficiální smyčka
+vždy skončí, zatímco integrace měří bez omezení počtu testů.
+
+Control server ČTÚ ([CTUCZ/open-rmbt](https://github.com/CTUCZ/open-rmbt)) žádnou
+z těchto mezí nevynucuje — kód pro odmítnutí opakovaného měření
+(`LoopModeRejectedException` v `RegistrationResource.java`) je ve zveřejněné verzi
+neaktivní a jiné omezení počtu požadavků tam není. Protokol RMBT má ale vlastní
+pojistku proti přetížení: token z `testRequest` nese čas, odkdy klient smí měřit,
+a při vytížení může control server start odložit. Integrace toto čekání
+respektuje.
+
+Hodnoty odpovídají stavu k srpnu 2026, ověřovat je vždy proti odkazovaným
+zdrojům ČTÚ.
 
 Historie měření pro průměry se drží mimo recorder, ve vlastním úložišti
 Home Assistantu (`.storage`), takže přežije restart a nezávisí na tom, jak
@@ -155,7 +190,7 @@ Klientské UUID se ukládá do konfigurace integrace a používá se opakovaně,
 
 ## Známá omezení
 
-- **Výsledky se na ČTÚ neodesílají.** Automatické měření každých 12 hodin by
+- **Výsledky se na ČTÚ neodesílají.** Pravidelné automatické měření by
   zaplevelovalo veřejná otevřená data ČTÚ. Důsledkem je, že měření nenajdeš
   v historii na webu ČTÚ a na jejich straně zůstane záznam testu bez výsledku,
   stejně jako u přerušeného měření.

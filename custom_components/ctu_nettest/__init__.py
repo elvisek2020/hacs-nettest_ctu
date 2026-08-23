@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+from typing import Any
+
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall
@@ -10,7 +13,14 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.start import async_at_started
 from homeassistant.helpers.typing import ConfigType
 
-from .const import DOMAIN, SERVICE_RUN_TEST
+from .const import (
+    CONF_UPDATE_INTERVAL_MINUTES,
+    CONFIG_ENTRY_VERSION,
+    DOMAIN,
+    LEGACY_CONF_UPDATE_INTERVAL_HOURS,
+    MAX_UPDATE_INTERVAL_MINUTES,
+    SERVICE_RUN_TEST,
+)
 from .coordinator import (
     CtuNetTestConfigEntry,
     CtuNetTestCoordinator,
@@ -36,6 +46,36 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             await entry.runtime_data.async_run_test()
 
     hass.services.async_register(DOMAIN, SERVICE_RUN_TEST, handle_run_test)
+    return True
+
+
+def _interval_in_minutes(settings: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the settings with the hour based interval expressed in minutes."""
+    migrated = dict(settings)
+    hours = migrated.pop(LEGACY_CONF_UPDATE_INTERVAL_HOURS, None)
+    if hours is None:
+        return migrated
+    migrated[CONF_UPDATE_INTERVAL_MINUTES] = min(
+        int(hours) * 60, MAX_UPDATE_INTERVAL_MINUTES
+    )
+    return migrated
+
+
+async def async_migrate_entry(
+    hass: HomeAssistant, config_entry: CtuNetTestConfigEntry
+) -> bool:
+    """Migrate an entry created when the interval was still measured in hours."""
+    if config_entry.version > CONFIG_ENTRY_VERSION:
+        return False
+
+    if config_entry.version < CONFIG_ENTRY_VERSION:
+        hass.config_entries.async_update_entry(
+            config_entry,
+            data=_interval_in_minutes(config_entry.data),
+            options=_interval_in_minutes(config_entry.options),
+            version=CONFIG_ENTRY_VERSION,
+        )
+
     return True
 
 

@@ -11,7 +11,7 @@ from custom_components.ctu_nettest.const import (
     CONF_AUTO_UPDATE_ENABLED,
     CONF_CLIENT_UUID,
     CONF_CONTROL_SERVER_URL,
-    CONF_UPDATE_INTERVAL_HOURS,
+    CONF_UPDATE_INTERVAL_MINUTES,
     DEFAULT_CONTROL_SERVER_URL,
     DOMAIN,
 )
@@ -53,10 +53,11 @@ def config_entry() -> MockConfigEntry:
     return MockConfigEntry(
         domain=DOMAIN,
         title="NetTest ČTÚ",
+        version=2,
         data={
             CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
             CONF_CLIENT_UUID: CLIENT_UUID,
-            CONF_UPDATE_INTERVAL_HOURS: 12,
+            CONF_UPDATE_INTERVAL_MINUTES: 30,
             CONF_AUTO_UPDATE_ENABLED: False,
         },
     )

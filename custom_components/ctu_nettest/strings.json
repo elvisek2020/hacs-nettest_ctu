@@ -6,13 +6,13 @@
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "Control server URL",
-          "update_interval_hours": "Measurement interval",
+          "update_interval_minutes": "Measurement interval",
           "auto_update_enabled": "Measure automatically",
           "average_sample_count": "Measurements used for the averages"
         },
         "data_description": {
           "control_server_url": "RMBT control server of the Czech Telecommunication Office. Change it only if you run your own RMBT infrastructure.",
-          "update_interval_hours": "A measurement fully saturates the connection, so keep the interval high.",
+          "update_interval_minutes": "A measurement transfers hundreds of megabytes and fully saturates the connection for about half a minute, so keep the interval as high as you can.",
           "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action.",
           "average_sample_count": "How many of the most recent measurements the average download and upload sensors are calculated from."
         }
@@ -33,13 +33,13 @@
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "Control server URL",
-          "update_interval_hours": "Measurement interval",
+          "update_interval_minutes": "Measurement interval",
           "auto_update_enabled": "Measure automatically",
           "average_sample_count": "Measurements used for the averages"
         },
         "data_description": {
           "control_server_url": "RMBT control server of the Czech Telecommunication Office. Change it only if you run your own RMBT infrastructure.",
-          "update_interval_hours": "A measurement fully saturates the connection, so keep the interval high.",
+          "update_interval_minutes": "A measurement transfers hundreds of megabytes and fully saturates the connection for about half a minute, so keep the interval as high as you can.",
           "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action.",
           "average_sample_count": "How many of the most recent measurements the average download and upload sensors are calculated from."
         }

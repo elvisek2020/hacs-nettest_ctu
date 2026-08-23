@@ -6,13 +6,13 @@
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "URL control serveru",
-          "update_interval_hours": "Interval měření",
+          "update_interval_minutes": "Interval měření",
           "auto_update_enabled": "Měřit automaticky",
           "average_sample_count": "Počet měření pro průměry"
         },
         "data_description": {
           "control_server_url": "RMBT control server Českého telekomunikačního úřadu. Měň jen pokud provozuješ vlastní RMBT infrastrukturu.",
-          "update_interval_hours": "Měření plně vytíží linku, drž proto interval vysoko.",
+          "update_interval_minutes": "Jedno měření přenese stovky megabajtů a na půl minuty plně vytíží linku, drž proto interval co nejvyšší.",
           "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test.",
           "average_sample_count": "Z kolika posledních měření se počítají senzory průměrného downloadu a uploadu."
         }
@@ -33,13 +33,13 @@
         "description": "{disclaimer}",
         "data": {
           "control_server_url": "URL control serveru",
-          "update_interval_hours": "Interval měření",
+          "update_interval_minutes": "Interval měření",
           "auto_update_enabled": "Měřit automaticky",
           "average_sample_count": "Počet měření pro průměry"
         },
         "data_description": {
           "control_server_url": "RMBT control server Českého telekomunikačního úřadu. Měň jen pokud provozuješ vlastní RMBT infrastrukturu.",
-          "update_interval_hours": "Měření plně vytíží linku, drž proto interval vysoko.",
+          "update_interval_minutes": "Jedno měření přenese stovky megabajtů a na půl minuty plně vytíží linku, drž proto interval co nejvyšší.",
           "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test.",
           "average_sample_count": "Z kolika posledních měření se počítají senzory průměrného downloadu a uploadu."
         }

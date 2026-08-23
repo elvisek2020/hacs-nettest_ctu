@@ -11,9 +11,10 @@ from custom_components.ctu_nettest.const import (
     CONF_AVERAGE_SAMPLE_COUNT,
     CONF_CLIENT_UUID,
     CONF_CONTROL_SERVER_URL,
-    CONF_UPDATE_INTERVAL_HOURS,
+    CONF_UPDATE_INTERVAL_MINUTES,
     DEFAULT_AVERAGE_SAMPLE_COUNT,
     DEFAULT_CONTROL_SERVER_URL,
+    DEFAULT_UPDATE_INTERVAL_MINUTES,
     DOMAIN,
 )
 from custom_components.ctu_nettest.rmbt_runner import RmbtError
@@ -22,7 +23,7 @@ from .conftest import CLIENT_UUID
 
 USER_INPUT = {
     CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
-    CONF_UPDATE_INTERVAL_HOURS: 12,
+    CONF_UPDATE_INTERVAL_MINUTES: DEFAULT_UPDATE_INTERVAL_MINUTES,
     CONF_AUTO_UPDATE_ENABLED: True,
 }
 
@@ -46,7 +47,7 @@ async def test_user_flow_creates_entry(
     assert result["title"] == "NetTest ČTÚ"
     assert result["data"] == {
         CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
-        CONF_UPDATE_INTERVAL_HOURS: 12,
+        CONF_UPDATE_INTERVAL_MINUTES: DEFAULT_UPDATE_INTERVAL_MINUTES,
         CONF_AUTO_UPDATE_ENABLED: True,
         CONF_AVERAGE_SAMPLE_COUNT: DEFAULT_AVERAGE_SAMPLE_COUNT,
         CONF_CLIENT_UUID: CLIENT_UUID,
@@ -141,14 +142,14 @@ async def test_options_flow_updates_schedule(
         result["flow_id"],
         {
             CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
-            CONF_UPDATE_INTERVAL_HOURS: 6,
+            CONF_UPDATE_INTERVAL_MINUTES: 15,
             CONF_AUTO_UPDATE_ENABLED: True,
         },
     )
     await hass.async_block_till_done()
 
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert config_entry.options[CONF_UPDATE_INTERVAL_HOURS] == 6
+    assert config_entry.options[CONF_UPDATE_INTERVAL_MINUTES] == 15
     assert config_entry.options[CONF_AUTO_UPDATE_ENABLED] is True
 
 
@@ -169,7 +170,7 @@ async def test_options_flow_does_not_start_a_measurement(
         result["flow_id"],
         {
             CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
-            CONF_UPDATE_INTERVAL_HOURS: 6,
+            CONF_UPDATE_INTERVAL_MINUTES: 15,
             CONF_AUTO_UPDATE_ENABLED: True,
         },
     )

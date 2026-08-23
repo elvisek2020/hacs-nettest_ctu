@@ -17,10 +17,10 @@ from .const import (
     CONF_AVERAGE_SAMPLE_COUNT,
     CONF_CLIENT_UUID,
     CONF_CONTROL_SERVER_URL,
-    CONF_UPDATE_INTERVAL_HOURS,
+    CONF_UPDATE_INTERVAL_MINUTES,
     DEFAULT_AVERAGE_SAMPLE_COUNT,
     DEFAULT_CONTROL_SERVER_URL,
-    DEFAULT_UPDATE_INTERVAL_HOURS,
+    DEFAULT_UPDATE_INTERVAL_MINUTES,
     DOMAIN,
     TEST_TIMEOUT_SECONDS,
 )
@@ -43,7 +43,9 @@ def measurement_interval(config_entry: ConfigEntry) -> timedelta | None:
     if not settings.get(CONF_AUTO_UPDATE_ENABLED, True):
         return None
     return timedelta(
-        hours=settings.get(CONF_UPDATE_INTERVAL_HOURS, DEFAULT_UPDATE_INTERVAL_HOURS)
+        minutes=settings.get(
+            CONF_UPDATE_INTERVAL_MINUTES, DEFAULT_UPDATE_INTERVAL_MINUTES
+        )
     )
 
 

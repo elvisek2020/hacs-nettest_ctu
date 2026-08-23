@@ -12,7 +12,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.ctu_nettest.const import (
     CONF_AUTO_UPDATE_ENABLED,
     CONF_CLIENT_UUID,
-    CONF_UPDATE_INTERVAL_HOURS,
+    CONF_UPDATE_INTERVAL_MINUTES,
     DOMAIN,
     SERVICE_RUN_TEST,
 )
@@ -50,7 +50,7 @@ async def test_scheduled_measurement_runs_after_startup(
     await hass.async_block_till_done()
 
     mock_run_test.assert_called_once()
-    assert config_entry.runtime_data.update_interval == timedelta(hours=12)
+    assert config_entry.runtime_data.update_interval == timedelta(minutes=30)
 
 
 async def test_service_populates_all_sensors(
@@ -216,11 +216,11 @@ async def test_interval_change_is_applied_without_reload(
 
     hass.config_entries.async_update_entry(
         config_entry,
-        options={CONF_AUTO_UPDATE_ENABLED: True, CONF_UPDATE_INTERVAL_HOURS: 8},
+        options={CONF_AUTO_UPDATE_ENABLED: True, CONF_UPDATE_INTERVAL_MINUTES: 45},
     )
     await hass.async_block_till_done()
 
-    assert coordinator.update_interval == timedelta(hours=8)
+    assert coordinator.update_interval == timedelta(minutes=45)
     mock_run_test.assert_not_called()
 
 

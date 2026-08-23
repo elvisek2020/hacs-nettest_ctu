@@ -10,7 +10,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.ctu_nettest.const import (
     CONF_AUTO_UPDATE_ENABLED,
     CONF_AVERAGE_SAMPLE_COUNT,
-    CONF_UPDATE_INTERVAL_HOURS,
+    CONF_UPDATE_INTERVAL_MINUTES,
     DOMAIN,
     SERVICE_RUN_TEST,
 )
@@ -116,7 +116,7 @@ async def test_smaller_window_is_applied_without_reload(
             config_entry,
             options={
                 CONF_AUTO_UPDATE_ENABLED: False,
-                CONF_UPDATE_INTERVAL_HOURS: 12,
+                CONF_UPDATE_INTERVAL_MINUTES: 30,
                 CONF_AVERAGE_SAMPLE_COUNT: 2,
             },
         )

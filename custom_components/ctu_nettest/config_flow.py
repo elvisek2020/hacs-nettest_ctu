@@ -24,16 +24,17 @@ from .const import (
     CONF_AVERAGE_SAMPLE_COUNT,
     CONF_CLIENT_UUID,
     CONF_CONTROL_SERVER_URL,
-    CONF_UPDATE_INTERVAL_HOURS,
+    CONF_UPDATE_INTERVAL_MINUTES,
+    CONFIG_ENTRY_VERSION,
     DEFAULT_AVERAGE_SAMPLE_COUNT,
     DEFAULT_CONTROL_SERVER_URL,
-    DEFAULT_UPDATE_INTERVAL_HOURS,
+    DEFAULT_UPDATE_INTERVAL_MINUTES,
     DISCLAIMER,
     DOMAIN,
     MAX_AVERAGE_SAMPLE_COUNT,
-    MAX_UPDATE_INTERVAL_HOURS,
+    MAX_UPDATE_INTERVAL_MINUTES,
     MIN_AVERAGE_SAMPLE_COUNT,
-    MIN_UPDATE_INTERVAL_HOURS,
+    MIN_UPDATE_INTERVAL_MINUTES,
 )
 from .coordinator import CtuNetTestConfigEntry, entry_settings
 from .rmbt_runner import RmbtError, register_client
@@ -56,18 +57,18 @@ def _schema(defaults: dict[str, Any], *, with_url: bool) -> vol.Schema:
         ] = TextSelector(TextSelectorConfig(type=TextSelectorType.URL))
     fields[
         vol.Required(
-            CONF_UPDATE_INTERVAL_HOURS,
+            CONF_UPDATE_INTERVAL_MINUTES,
             default=defaults.get(
-                CONF_UPDATE_INTERVAL_HOURS, DEFAULT_UPDATE_INTERVAL_HOURS
+                CONF_UPDATE_INTERVAL_MINUTES, DEFAULT_UPDATE_INTERVAL_MINUTES
             ),
         )
     ] = NumberSelector(
         NumberSelectorConfig(
-            min=MIN_UPDATE_INTERVAL_HOURS,
-            max=MAX_UPDATE_INTERVAL_HOURS,
+            min=MIN_UPDATE_INTERVAL_MINUTES,
+            max=MAX_UPDATE_INTERVAL_MINUTES,
             step=1,
             mode=NumberSelectorMode.BOX,
-            unit_of_measurement="h",
+            unit_of_measurement="min",
         )
     )
     fields[
@@ -97,7 +98,9 @@ def _schema(defaults: dict[str, Any], *, with_url: bool) -> vol.Schema:
 def _normalise(user_input: dict[str, Any]) -> dict[str, Any]:
     """Coerce selector output into the types stored in the entry."""
     normalised = dict(user_input)
-    normalised[CONF_UPDATE_INTERVAL_HOURS] = int(normalised[CONF_UPDATE_INTERVAL_HOURS])
+    normalised[CONF_UPDATE_INTERVAL_MINUTES] = int(
+        normalised[CONF_UPDATE_INTERVAL_MINUTES]
+    )
     normalised[CONF_AVERAGE_SAMPLE_COUNT] = int(normalised[CONF_AVERAGE_SAMPLE_COUNT])
     if CONF_CONTROL_SERVER_URL in normalised:
         normalised[CONF_CONTROL_SERVER_URL] = (
@@ -114,7 +117,7 @@ def _url_is_valid(url: str) -> bool:
 class CtuNetTestConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle the initial configuration."""
 
-    VERSION = 1
+    VERSION = CONFIG_ENTRY_VERSION
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None

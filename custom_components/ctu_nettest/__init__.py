@@ -44,6 +44,7 @@ async def async_setup_entry(
 ) -> bool:
     """Set up NetTest ČTÚ from a config entry."""
     coordinator = CtuNetTestCoordinator(hass, config_entry)
+    await coordinator.history.async_load()
     config_entry.runtime_data = coordinator
 
     async def finish_startup(hass: HomeAssistant) -> None:
@@ -74,4 +75,6 @@ async def async_unload_entry(
     hass: HomeAssistant, config_entry: CtuNetTestConfigEntry
 ) -> bool:
     """Unload a config entry."""
-    return await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS)
+    unloaded = await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS)
+    await config_entry.runtime_data.history.async_flush()
+    return unloaded

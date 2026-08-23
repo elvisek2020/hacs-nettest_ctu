@@ -7,12 +7,14 @@
         "data": {
           "control_server_url": "Control server URL",
           "update_interval_hours": "Measurement interval",
-          "auto_update_enabled": "Measure automatically"
+          "auto_update_enabled": "Measure automatically",
+          "average_sample_count": "Measurements used for the averages"
         },
         "data_description": {
           "control_server_url": "RMBT control server of the Czech Telecommunication Office. Change it only if you run your own RMBT infrastructure.",
           "update_interval_hours": "A measurement fully saturates the connection, so keep the interval high.",
-          "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action."
+          "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action.",
+          "average_sample_count": "How many of the most recent measurements the average download and upload sensors are calculated from."
         }
       }
     },
@@ -32,12 +34,14 @@
         "data": {
           "control_server_url": "Control server URL",
           "update_interval_hours": "Measurement interval",
-          "auto_update_enabled": "Measure automatically"
+          "auto_update_enabled": "Measure automatically",
+          "average_sample_count": "Measurements used for the averages"
         },
         "data_description": {
           "control_server_url": "RMBT control server of the Czech Telecommunication Office. Change it only if you run your own RMBT infrastructure.",
           "update_interval_hours": "A measurement fully saturates the connection, so keep the interval high.",
-          "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action."
+          "auto_update_enabled": "When disabled, a measurement only runs via the ctu_nettest.run_test action.",
+          "average_sample_count": "How many of the most recent measurements the average download and upload sensors are calculated from."
         }
       }
     },
@@ -52,7 +56,9 @@
       "upload": { "name": "Upload" },
       "ping": { "name": "Ping" },
       "jitter": { "name": "Jitter" },
-      "last_test": { "name": "Last test" }
+      "last_test": { "name": "Last test" },
+      "average_download": { "name": "Average download" },
+      "average_upload": { "name": "Average upload" }
     },
     "binary_sensor": {
       "test_running": { "name": "Test running" }

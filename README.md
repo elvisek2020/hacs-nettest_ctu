@@ -26,6 +26,8 @@ i na interval.
 | `sensor.ctu_nettest_ping` | ms | nejkratší naměřený ping |
 | `sensor.ctu_nettest_jitter` | ms | rozptyl pingu (viz níže) |
 | `sensor.ctu_nettest_last_test` | timestamp | čas posledního dokončeného měření |
+| `sensor.ctu_nettest_average_download` | Mbit/s | průměrný download z posledních N měření |
+| `sensor.ctu_nettest_average_upload` | Mbit/s | průměrný upload z posledních N měření |
 | `binary_sensor.ctu_nettest_test_running` | on/off | probíhá měření |
 
 Akce `ctu_nettest.run_test` spustí měření mimo nastavený interval.
@@ -33,6 +35,10 @@ Akce `ctu_nettest.run_test` spustí měření mimo nastavený interval.
 Doplňující údaje jsou v atributech entit: počet vláken, přenesené bajty, medián
 pingu, počet vzorků, adresa měřicího serveru a délka testu. Veřejná IP adresa se
 **záměrně nevystavuje**, i když ji control server v odpovědi posílá.
+
+Průměrové senzory mají v atributech `sample_count` (z kolika měření je průměr
+spočítaný), `sample_window` (nastavený počet měření) a `oldest_sample` (čas
+nejstaršího započítaného měření).
 
 ## Požadavky
 
@@ -64,9 +70,17 @@ pingu, počet vzorků, adresa měřicího serveru a délka testu. Veřejná IP a
 | URL control serveru | `https://nettest.ctu.gov.cz/RMBTControlServer` | Měň jen pokud provozuješ vlastní RMBT infrastrukturu. |
 | Interval měření | 12 h | Měření plně vytíží linku, drž interval vysoko. |
 | Měřit automaticky | zapnuto | Když vypneš, měření se spustí jen akcí `ctu_nettest.run_test`. |
+| Počet měření pro průměry | 10 | Z kolika posledních měření se počítají průměrný download a upload. |
 
 Všechno se dá později změnit v **Konfigurovat** u integrace. Změna nastavení
-nespustí měření — nový interval se aplikuje za běhu.
+nespustí měření — nový interval i nový počet měření pro průměry se aplikují za
+běhu.
+
+Historie měření pro průměry se drží mimo recorder, ve vlastním úložišti
+Home Assistantu (`.storage`), takže přežije restart a nezávisí na tom, jak
+dlouho ti recorder drží historii. Plnit se ale začne až od instalace verze,
+která průměry umí — starší výsledky se zpětně nedotahují. Než se nasbírá N
+měření, průměr se počítá z toho, co je k dispozici.
 
 Měření se nikdy nespustí během startu Home Assistantu, ale až po jeho dokončení.
 

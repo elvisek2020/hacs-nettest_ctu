@@ -21,6 +21,7 @@ from homeassistant.helpers.typing import StateType
 from .const import DISCLAIMER
 from .coordinator import CtuNetTestConfigEntry, CtuNetTestCoordinator
 from .entity import CtuNetTestEntity
+from .history import MeasurementHistory
 from .rmbt_runner import RmbtResult
 
 
@@ -30,6 +31,13 @@ class CtuNetTestSensorDescription(SensorEntityDescription):
 
     value: Callable[[RmbtResult], StateType | datetime]
     attributes: Callable[[RmbtResult], dict[str, Any]] | None = None
+
+
+@dataclass(frozen=True, kw_only=True)
+class CtuNetTestAverageSensorDescription(SensorEntityDescription):
+    """Describes a NetTest ČTÚ sensor averaging the retained measurements."""
+
+    average: Callable[[MeasurementHistory], float | None]
 
 
 SENSORS: tuple[CtuNetTestSensorDescription, ...] = (
@@ -95,6 +103,28 @@ SENSORS: tuple[CtuNetTestSensorDescription, ...] = (
 )
 
 
+AVERAGE_SENSORS: tuple[CtuNetTestAverageSensorDescription, ...] = (
+    CtuNetTestAverageSensorDescription(
+        key="average_download",
+        translation_key="average_download",
+        device_class=SensorDeviceClass.DATA_RATE,
+        native_unit_of_measurement=UnitOfDataRate.MEGABITS_PER_SECOND,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=2,
+        average=lambda history: history.average_download(),
+    ),
+    CtuNetTestAverageSensorDescription(
+        key="average_upload",
+        translation_key="average_upload",
+        device_class=SensorDeviceClass.DATA_RATE,
+        native_unit_of_measurement=UnitOfDataRate.MEGABITS_PER_SECOND,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=2,
+        average=lambda history: history.average_upload(),
+    ),
+)
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     config_entry: CtuNetTestConfigEntry,
@@ -103,7 +133,13 @@ async def async_setup_entry(
     """Set up the NetTest ČTÚ sensors."""
     coordinator = config_entry.runtime_data
     async_add_entities(
-        CtuNetTestSensor(coordinator, description) for description in SENSORS
+        [
+            *(CtuNetTestSensor(coordinator, description) for description in SENSORS),
+            *(
+                CtuNetTestAverageSensor(coordinator, description)
+                for description in AVERAGE_SENSORS
+            ),
+        ]
     )
 
 
@@ -139,3 +175,38 @@ class CtuNetTestSensor(CtuNetTestEntity, SensorEntity):
                 self.entity_description.attributes(self.coordinator.data)
             )
         return self._attributes
+
+
+class CtuNetTestAverageSensor(CtuNetTestEntity, SensorEntity):
+    """Mean of the retained measurements."""
+
+    entity_description: CtuNetTestAverageSensorDescription
+
+    @property
+    @override
+    def native_value(self) -> float | None:
+        """Return the average over the retained measurements."""
+        return self.entity_description.average(self.coordinator.history)
+
+    @property
+    @override
+    def available(self) -> bool:
+        """Stay available as long as an average can still be calculated.
+
+        A single failed measurement must not hide an otherwise valid average,
+        while a fresh install stays unknown rather than unavailable.
+        """
+        return super().available or self.coordinator.history.sample_count > 0
+
+    @property
+    @override
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return what the average is based on plus the permanent disclaimer."""
+        history = self.coordinator.history
+        samples = history.samples
+        return {
+            "disclaimer": DISCLAIMER,
+            "sample_count": history.sample_count,
+            "sample_window": history.window_size,
+            "oldest_sample": samples[0].timestamp.isoformat() if samples else None,
+        }

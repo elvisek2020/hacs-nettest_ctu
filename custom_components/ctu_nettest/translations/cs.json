@@ -7,12 +7,14 @@
         "data": {
           "control_server_url": "URL control serveru",
           "update_interval_hours": "Interval měření",
-          "auto_update_enabled": "Měřit automaticky"
+          "auto_update_enabled": "Měřit automaticky",
+          "average_sample_count": "Počet měření pro průměry"
         },
         "data_description": {
           "control_server_url": "RMBT control server Českého telekomunikačního úřadu. Měň jen pokud provozuješ vlastní RMBT infrastrukturu.",
           "update_interval_hours": "Měření plně vytíží linku, drž proto interval vysoko.",
-          "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test."
+          "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test.",
+          "average_sample_count": "Z kolika posledních měření se počítají senzory průměrného downloadu a uploadu."
         }
       }
     },
@@ -32,12 +34,14 @@
         "data": {
           "control_server_url": "URL control serveru",
           "update_interval_hours": "Interval měření",
-          "auto_update_enabled": "Měřit automaticky"
+          "auto_update_enabled": "Měřit automaticky",
+          "average_sample_count": "Počet měření pro průměry"
         },
         "data_description": {
           "control_server_url": "RMBT control server Českého telekomunikačního úřadu. Měň jen pokud provozuješ vlastní RMBT infrastrukturu.",
           "update_interval_hours": "Měření plně vytíží linku, drž proto interval vysoko.",
-          "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test."
+          "auto_update_enabled": "Když je vypnuto, měření se spustí jen akcí ctu_nettest.run_test.",
+          "average_sample_count": "Z kolika posledních měření se počítají senzory průměrného downloadu a uploadu."
         }
       }
     },
@@ -52,7 +56,9 @@
       "upload": { "name": "Upload" },
       "ping": { "name": "Ping" },
       "jitter": { "name": "Jitter" },
-      "last_test": { "name": "Poslední měření" }
+      "last_test": { "name": "Poslední měření" },
+      "average_download": { "name": "Průměrný download" },
+      "average_upload": { "name": "Průměrný upload" }
     },
     "binary_sensor": {
       "test_running": { "name": "Probíhá měření" }

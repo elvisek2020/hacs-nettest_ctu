@@ -14,14 +14,17 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import (
     CONF_AUTO_UPDATE_ENABLED,
+    CONF_AVERAGE_SAMPLE_COUNT,
     CONF_CLIENT_UUID,
     CONF_CONTROL_SERVER_URL,
     CONF_UPDATE_INTERVAL_HOURS,
+    DEFAULT_AVERAGE_SAMPLE_COUNT,
     DEFAULT_CONTROL_SERVER_URL,
     DEFAULT_UPDATE_INTERVAL_HOURS,
     DOMAIN,
     TEST_TIMEOUT_SECONDS,
 )
+from .history import MeasurementHistory
 from .rmbt_runner import RmbtError, RmbtOptions, RmbtResult, run_test
 
 _LOGGER = logging.getLogger(__name__)
@@ -44,6 +47,12 @@ def measurement_interval(config_entry: ConfigEntry) -> timedelta | None:
     )
 
 
+def average_sample_count(config_entry: ConfigEntry) -> int:
+    """Return how many measurements the averages are calculated from."""
+    settings = entry_settings(config_entry)
+    return settings.get(CONF_AVERAGE_SAMPLE_COUNT, DEFAULT_AVERAGE_SAMPLE_COUNT)
+
+
 class CtuNetTestCoordinator(DataUpdateCoordinator[RmbtResult]):
     """Run RMBT measurements and publish the results to the entities."""
 
@@ -54,6 +63,9 @@ class CtuNetTestCoordinator(DataUpdateCoordinator[RmbtResult]):
     ) -> None:
         """Initialize the coordinator."""
         self._measurement: asyncio.Future[RmbtResult] | None = None
+        self.history = MeasurementHistory(
+            hass, config_entry.entry_id, average_sample_count(config_entry)
+        )
         super().__init__(
             hass,
             _LOGGER,
@@ -70,6 +82,8 @@ class CtuNetTestCoordinator(DataUpdateCoordinator[RmbtResult]):
     def apply_options(self) -> None:
         """Pick up a changed interval without re-running the measurement."""
         self.update_interval = measurement_interval(self.config_entry)
+        self.history.resize(average_sample_count(self.config_entry))
+        self.async_update_listeners()
 
     async def async_run_test(self) -> None:
         """Run a measurement outside of the schedule."""
@@ -111,6 +125,7 @@ class CtuNetTestCoordinator(DataUpdateCoordinator[RmbtResult]):
             raise UpdateFailed(f"Měření selhalo: {err}") from err
 
         self._persist_client_uuid(result.client_uuid)
+        self.history.add(result)
         return result
 
     def _persist_client_uuid(self, client_uuid: str) -> None:

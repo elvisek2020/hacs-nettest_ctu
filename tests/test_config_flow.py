@@ -8,9 +8,11 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.ctu_nettest.const import (
     CONF_AUTO_UPDATE_ENABLED,
+    CONF_AVERAGE_SAMPLE_COUNT,
     CONF_CLIENT_UUID,
     CONF_CONTROL_SERVER_URL,
     CONF_UPDATE_INTERVAL_HOURS,
+    DEFAULT_AVERAGE_SAMPLE_COUNT,
     DEFAULT_CONTROL_SERVER_URL,
     DOMAIN,
 )
@@ -46,6 +48,7 @@ async def test_user_flow_creates_entry(
         CONF_CONTROL_SERVER_URL: DEFAULT_CONTROL_SERVER_URL,
         CONF_UPDATE_INTERVAL_HOURS: 12,
         CONF_AUTO_UPDATE_ENABLED: True,
+        CONF_AVERAGE_SAMPLE_COUNT: DEFAULT_AVERAGE_SAMPLE_COUNT,
         CONF_CLIENT_UUID: CLIENT_UUID,
     }
 

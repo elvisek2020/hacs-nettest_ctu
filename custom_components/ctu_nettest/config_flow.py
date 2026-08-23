@@ -21,14 +21,18 @@ from homeassistant.helpers.selector import (
 
 from .const import (
     CONF_AUTO_UPDATE_ENABLED,
+    CONF_AVERAGE_SAMPLE_COUNT,
     CONF_CLIENT_UUID,
     CONF_CONTROL_SERVER_URL,
     CONF_UPDATE_INTERVAL_HOURS,
+    DEFAULT_AVERAGE_SAMPLE_COUNT,
     DEFAULT_CONTROL_SERVER_URL,
     DEFAULT_UPDATE_INTERVAL_HOURS,
     DISCLAIMER,
     DOMAIN,
+    MAX_AVERAGE_SAMPLE_COUNT,
     MAX_UPDATE_INTERVAL_HOURS,
+    MIN_AVERAGE_SAMPLE_COUNT,
     MIN_UPDATE_INTERVAL_HOURS,
 )
 from .coordinator import CtuNetTestConfigEntry, entry_settings
@@ -72,6 +76,21 @@ def _schema(defaults: dict[str, Any], *, with_url: bool) -> vol.Schema:
             default=defaults.get(CONF_AUTO_UPDATE_ENABLED, True),
         )
     ] = BooleanSelector()
+    fields[
+        vol.Required(
+            CONF_AVERAGE_SAMPLE_COUNT,
+            default=defaults.get(
+                CONF_AVERAGE_SAMPLE_COUNT, DEFAULT_AVERAGE_SAMPLE_COUNT
+            ),
+        )
+    ] = NumberSelector(
+        NumberSelectorConfig(
+            min=MIN_AVERAGE_SAMPLE_COUNT,
+            max=MAX_AVERAGE_SAMPLE_COUNT,
+            step=1,
+            mode=NumberSelectorMode.BOX,
+        )
+    )
     return vol.Schema(fields)
 
 
@@ -79,6 +98,7 @@ def _normalise(user_input: dict[str, Any]) -> dict[str, Any]:
     """Coerce selector output into the types stored in the entry."""
     normalised = dict(user_input)
     normalised[CONF_UPDATE_INTERVAL_HOURS] = int(normalised[CONF_UPDATE_INTERVAL_HOURS])
+    normalised[CONF_AVERAGE_SAMPLE_COUNT] = int(normalised[CONF_AVERAGE_SAMPLE_COUNT])
     if CONF_CONTROL_SERVER_URL in normalised:
         normalised[CONF_CONTROL_SERVER_URL] = (
             normalised[CONF_CONTROL_SERVER_URL].strip().rstrip("/")

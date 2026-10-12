@@ -12,7 +12,7 @@ proti měřicí infrastruktuře **NetTest ČTÚ** ([nettest.ctu.gov.cz](https://
 pomocí protokolu **RMBT**. Výsledky vystaví jako senzory a jde je spustit ručně
 i na interval.
 
-![NetTest ČTÚ — stránka zařízení se senzory rychlosti, pingu a průměrů](https://raw.githubusercontent.com/elvisek2020/hacs-nettest_ctu/main/docs/preview.png)
+![NetTest ČTÚ — senzory rychlosti, pingu a průměrů v Home Assistantu](https://raw.githubusercontent.com/elvisek2020/hacs-nettest_ctu/main/docs/preview.png)
 
 - download, upload, ping a jitter jako senzory, k tomu čas posledního měření
 - průměrný download a upload z posledních N měření, který přežije restart

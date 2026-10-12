@@ -1,7 +1,4 @@
-# Lokální pomocné adresáře – nikdy necommitovat
-_backup/
-_docs/
-
+.DS_Store
 __pycache__/
 *.py[cod]
 .venv/
@@ -11,4 +8,8 @@ venv/
 .coverage
 htmlcov/
 *.egg-info/
-.DS_Store
+
+# lokální deník práce, synchronizuje se přes iCloud
+_docs/
+_backup/
+.cursor/

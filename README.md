@@ -1,9 +1,23 @@
-# NetTest ČTÚ pro Home Assistant
+# NetTest ČTÚ
+
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
+[![Release](https://img.shields.io/github/v/release/elvisek2020/hacs-nettest_ctu)](https://github.com/elvisek2020/hacs-nettest_ctu/releases)
+[![Validate](https://github.com/elvisek2020/hacs-nettest_ctu/actions/workflows/validate.yml/badge.svg)](https://github.com/elvisek2020/hacs-nettest_ctu/actions/workflows/validate.yml)
+[![Licence](https://img.shields.io/github/license/elvisek2020/hacs-nettest_ctu)](LICENSE)
+
+[![Otevřít v HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=elvisek2020&repository=hacs-nettest_ctu&category=integration)
 
 Custom integrace pro Home Assistant, která měří rychlost internetového připojení
 proti měřicí infrastruktuře **NetTest ČTÚ** ([nettest.ctu.gov.cz](https://nettest.ctu.gov.cz))
 pomocí protokolu **RMBT**. Výsledky vystaví jako senzory a jde je spustit ručně
 i na interval.
+
+![NetTest ČTÚ — stránka zařízení se senzory rychlosti, pingu a průměrů](https://raw.githubusercontent.com/elvisek2020/hacs-nettest_ctu/main/docs/preview.png)
+
+- download, upload, ping a jitter jako senzory, k tomu čas posledního měření
+- průměrný download a upload z posledních N měření, který přežije restart
+- měření automaticky na interval, tlačítkem na stránce zařízení nebo akcí `ctu_nettest.run_test`
+- bez Javy a externích binárek, funguje na Home Assistant OS, Container i Core
 
 > ## Upozornění
 >
@@ -17,9 +31,58 @@ i na interval.
 > síti, typicky přes Wi-Fi a s dalším provozem na lince, takže výsledek pro
 > reklamaci použít nelze.
 
-## Co integrace umí
+## Předpoklady a závislosti
 
-![Stránka zařízení NetTest ČTÚ v Home Assistantu se senzory rychlosti, pingu a průměrů](https://raw.githubusercontent.com/elvisek2020/hacs-nettest_ctu/main/images/device-page.jpg)
+- Home Assistant 2026.3 nebo novější
+- Žádná Java, žádné externí binárky. Integrace používá PyPI balíček
+  [`rmbt-client`](https://pypi.org/project/rmbt-client/), který je čistě
+  v Pythonu, takže funguje na **Home Assistant OS, Container i Core**.
+
+## Instalace
+
+### HACS (doporučeno)
+
+1. HACS → tři tečky vpravo nahoře → **Custom repositories**
+2. Vlož URL `https://github.com/elvisek2020/hacs-nettest_ctu`, kategorie **Integration**
+3. Nainstaluj **NetTest ČTÚ**
+4. Restartuj Home Assistant a přidej integraci v **Nastavení → Zařízení a služby → Přidat integraci**
+
+HACS nabízí aktualizace z GitHub releases.
+
+### Ručně
+
+Zkopíruj `custom_components/ctu_nettest` do `/config/custom_components/`,
+restartuj Home Assistant a přidej integraci přes **Nastavení → Zařízení a služby**.
+
+## Konfigurace
+
+| Položka | Default | Popis |
+|---|---|---|
+| URL control serveru | `https://nettest.ctu.gov.cz/RMBTControlServer` | Měň jen pokud provozuješ vlastní RMBT infrastrukturu. |
+| Interval měření | 30 min | Zadává se v minutách, minimum je 10 a maximum 10080 (7 dní). Měření plně vytíží linku, drž interval co nejvyšší. |
+| Měřit automaticky | zapnuto | Když vypneš, měření se spustí jen akcí `ctu_nettest.run_test`. |
+| Počet měření pro průměry | 10 | Z kolika posledních měření se počítají průměrný download a upload. |
+
+Všechno se dá později změnit v **Konfigurovat** u integrace. Změna nastavení
+nespustí měření — nový interval i nový počet měření pro průměry se aplikují za
+běhu.
+
+Pozor na objem dat: jedno měření přenese stovky megabajtů, takže třeba interval
+30 minut znamená 48 měření denně a řádově desítky gigabajtů měsíčně. Na měřeném
+tarifu volte interval odpovídajícím způsobem.
+
+Instalace nastavené ve starší verzi, kde se interval zadával v hodinách, se
+převedou automaticky (12 h se stane 720 min), není potřeba nic přenastavovat.
+
+Historie měření pro průměry se drží mimo recorder, ve vlastním úložišti
+Home Assistantu (`.storage`), takže přežije restart a nezávisí na tom, jak
+dlouho ti recorder drží historii. Plnit se ale začne až od instalace verze,
+která průměry umí — starší výsledky se zpětně nedotahují. Než se nasbírá N
+měření, průměr se počítá z toho, co je k dispozici.
+
+Měření se nikdy nespustí během startu Home Assistantu, ale až po jeho dokončení.
+
+## Entity
 
 | Entita | Jednotka | Popis |
 |---|---|---|
@@ -49,50 +112,7 @@ Průměrové senzory mají v atributech `sample_count` (z kolika měření je pr
 spočítaný), `sample_window` (nastavený počet měření) a `oldest_sample` (čas
 nejstaršího započítaného měření).
 
-## Požadavky
-
-- Home Assistant 2024.12 nebo novější
-- Žádná Java, žádné externí binárky. Integrace používá PyPI balíček
-  [`rmbt-client`](https://pypi.org/project/rmbt-client/), který je čistě
-  v Pythonu, takže funguje na **Home Assistant OS, Container i Core**.
-
-## Instalace
-
-### HACS (custom repository)
-
-1. HACS → tři tečky vpravo nahoře → **Custom repositories**
-2. Repository: `https://github.com/elvisek2020/hacs-nettest_ctu`, kategorie **Integration**
-3. Najdi **NetTest ČTÚ**, dej **Download**
-4. Restartuj Home Assistant
-5. **Nastavení → Zařízení a služby → Přidat integraci → NetTest ČTÚ**
-
-### Manuálně
-
-1. Zkopíruj `custom_components/ctu_nettest` do `<config>/custom_components/ctu_nettest`
-2. Restartuj Home Assistant
-3. Přidej integraci přes **Nastavení → Zařízení a služby**
-
-## Konfigurace
-
-| Položka | Default | Popis |
-|---|---|---|
-| URL control serveru | `https://nettest.ctu.gov.cz/RMBTControlServer` | Měň jen pokud provozuješ vlastní RMBT infrastrukturu. |
-| Interval měření | 30 min | Zadává se v minutách, minimum je 10 a maximum 10080 (7 dní). Měření plně vytíží linku, drž interval co nejvyšší. |
-| Měřit automaticky | zapnuto | Když vypneš, měření se spustí jen akcí `ctu_nettest.run_test`. |
-| Počet měření pro průměry | 10 | Z kolika posledních měření se počítají průměrný download a upload. |
-
-Všechno se dá později změnit v **Konfigurovat** u integrace. Změna nastavení
-nespustí měření — nový interval i nový počet měření pro průměry se aplikují za
-běhu.
-
-Pozor na objem dat: jedno měření přenese stovky megabajtů, takže třeba interval
-30 minut znamená 48 měření denně a řádově desítky gigabajtů měsíčně. Na měřeném
-tarifu volte interval odpovídajícím způsobem.
-
-Instalace nastavené ve starší verzi, kde se interval zadával v hodinách, se
-převedou automaticky (12 h se stane 720 min), není potřeba nic přenastavovat.
-
-### Limity na straně ČTÚ
+## Limity na straně ČTÚ
 
 ČTÚ nikde nepublikuje pravidla pro automatizované měření, ale jeho vlastní režim
 [Opakované měření](https://nettest.ctu.gov.cz/cs/Loop) si zadané hodnoty ořezává.
@@ -119,14 +139,6 @@ respektuje.
 
 Hodnoty odpovídají stavu k srpnu 2026, ověřovat je vždy proti odkazovaným
 zdrojům ČTÚ.
-
-Historie měření pro průměry se drží mimo recorder, ve vlastním úložišti
-Home Assistantu (`.storage`), takže přežije restart a nezávisí na tom, jak
-dlouho ti recorder drží historii. Plnit se ale začne až od instalace verze,
-která průměry umí — starší výsledky se zpětně nedotahují. Než se nasbírá N
-měření, průměr se počítá z toho, co je k dispozici.
-
-Měření se nikdy nespustí během startu Home Assistantu, ale až po jeho dokončení.
 
 ## Příklad automatizace
 
@@ -194,6 +206,22 @@ Jedno měření trvá přibližně půl minuty a po celou dobu plně vytíží l
 Klientské UUID se ukládá do konfigurace integrace a používá se opakovaně, aby
 ČTÚ nezakládal nový klientský záznam při každém měření.
 
+## Vývoj
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+.venv/bin/python -m pytest          # testy, žádný provoz proti ČTÚ
+.venv/bin/ruff check . && .venv/bin/ruff format --check .
+```
+
+## Vydání verze
+
+1. Zvedni verzi v `custom_components/ctu_nettest/manifest.json` (SemVer).
+2. Doplň sekci `## vX.Y.Z — RRRR-MM-DD` do `CHANGELOG.md`.
+3. Commit `Release vX.Y.Z: …`, `git tag vX.Y.Z`, push commitu i tagu.
+4. GitHub Actions vytvoří release s textem z CHANGELOG a HACS nabídne aktualizaci.
+
 ## Známá omezení
 
 - **Výsledky se na ČTÚ neodesílají.** Pravidelné automatické měření by
@@ -209,18 +237,11 @@ Klientské UUID se ukládá do konfigurace integrace a používá se opakovaně,
 - Nejde o pasivní senzor: každé měření reálně přenese stovky MB dat. Pozor při
   měřeném datovém tarifu.
 
-## Vývoj
+## Autor
 
-```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python -m pytest          # testy, žádný provoz proti ČTÚ
-.venv/bin/ruff check . && .venv/bin/ruff format --check .
-```
-
-## Licence a poděkování
-
-Apache License 2.0 — viz [LICENSE](LICENSE), konzistentně s upstream RMBT.
+**[elvisek2020](https://github.com/elvisek2020)** — integrace vznikla, aby šla
+domácí linka průběžně hlídat proti české měřicí infrastruktuře přímo
+z Home Assistantu. Licence MIT, viz [LICENSE](LICENSE).
 
 Postaveno na těchto open-source projektech:
 

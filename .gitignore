@@ -13,3 +13,6 @@ htmlcov/
 _docs/
 _backup/
 .cursor/
+
+# lokální instrukce pro Claude Code
+CLAUDE.md
